@@ -1,7 +1,7 @@
 import React from "react"
 import { Link, graphql } from "gatsby"
+import Img from "gatsby-image"
 
-import Bio from "../components/bio"
 import Layout from "../components/layout"
 import SEO from "../components/seo"
 
@@ -13,7 +13,6 @@ const BlogIndex = ({ data, location }) => {
     return (
       <Layout location={location} title={siteTitle}>
         <SEO title="All posts" />
-        <Bio />
         <p>
           No blog posts found. Add markdown posts to "content/blog" (or the
           directory you specified for the "gatsby-source-filesystem" plugin in
@@ -26,19 +25,20 @@ const BlogIndex = ({ data, location }) => {
   return (
     <Layout location={location} title={siteTitle}>
       <SEO title="All posts" />
-      <Bio />
-      <ol style={{ listStyle: `none` }}>
+      
         {posts.map(post => {
           const title = post.frontmatter.title || post.fields.slug
 
           return (
-            <li key={post.fields.slug}>
               <article
-                className="post-list-item"
+                key={post.fields.slug}
+                className="vylet"
                 itemScope
                 itemType="http://schema.org/Article"
               >
-                <header>
+                <header
+                className="nazev_vyletu"
+                >
                   <h2>
                     <Link to={post.fields.slug} itemProp="url">
                       <span itemProp="headline">{title}</span>
@@ -46,19 +46,24 @@ const BlogIndex = ({ data, location }) => {
                   </h2>
                   <small>{post.frontmatter.date}</small>
                 </header>
-                <section>
+                <section
+                className="text_vyletu"
+                >
                   <p
                     dangerouslySetInnerHTML={{
                       __html: post.frontmatter.description || post.excerpt,
                     }}
                     itemProp="description"
                   />
+                  <Link to={post.fields.slug} itemProp="url" className="more">
+                      <span itemProp="headline">více...</span>
+                  </Link>
                 </section>
-              </article>
-            </li>
+                <Img fluid={post.frontmatter.motive.childImageSharp.fluid} />
+              </article>  
           )
         })}
-      </ol>
+
     </Layout>
   )
 }
@@ -82,6 +87,13 @@ export const pageQuery = graphql`
           date(formatString: "MMMM DD, YYYY")
           title
           description
+          motive {
+            childImageSharp {
+              fluid(maxWidth: 630) {
+                ...GatsbyImageSharpFluid
+              }
+            }
+          }
         }
       }
     }
