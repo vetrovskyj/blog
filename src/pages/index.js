@@ -59,7 +59,7 @@ const BlogIndex = ({ data, location }) => {
                       <span itemProp="headline">více...</span>
                   </Link>
                 </section>
-                <Img fluid={post.frontmatter.motive} />
+                <Img />
               </article>  
           )
         })}
